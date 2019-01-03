@@ -1,0 +1,33 @@
+---
+ - name: Install openvpn
+   apt:
+     name: openvpn
+     state: present
+   environment:
+     RUNLEVEL: 1
+
+ - name: Install easy-rsa
+   apt:
+     name: easy-rsa
+     state: present
+   environment:
+     RUNLEVEL: 1
+
+#- name: Create symlink
+#  file: src=/usr/share/easy-rsa/openssl-1.0.0.cnf dest=/usr/share/easy-rsa/openssl.cnf state=link
+
+ - name: Create symlink
+   file: 
+     src: '/usr/share/easy-rsa/{{ openssl_ver }}.cnf'
+     dest: '/usr/share/easy-rsa/openssl.cnf'
+     state: link
+
+ - name: Create config from template
+   template:
+     src: templates/vars.j2
+#    src: roles/ovpn/templates/vars.j2
+     dest: /usr/share/easy-rsa/vars
+     owner: root
+     group: root
+     mode: 0644
+     backup: yes

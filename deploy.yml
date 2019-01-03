@@ -6,14 +6,12 @@
   become_method: sudo
 
   vars:
-    ruby_version: 2.2.3
     username: 'deploy'
     home: '/home/{{ user }}'
-    pub_key: '/home/goto/.ssh/id_rsa.pub'
 
     update_cache: yes
     cache_valid_time: 86400
 
   roles:
     - aptUpdate
-    - adduser
+    - ovpn
