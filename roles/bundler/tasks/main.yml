@@ -1,0 +1,44 @@
+---
+#- name: Install bundler
+#  become_user: deploy
+#  gem:
+#    name: bundler
+#    version: '{{ ruby_version }}'
+#    state: present
+
+
+#- name: Install bundler
+#  become_user: deploy
+#  bundler:
+#    state: present
+#    executable: ~/.rvm/gems/{{ ruby_version }}/bin/bundle
+
+#- name: Create file dis gen loc doc
+#  become_user: deploy
+#  file:
+#    path: '~/test'
+#    state: touch
+#    owner: deploy
+#    group: deploy
+#    mode: 0644
+
+ - name: Disable generate local documentation
+   become_user: deploy
+   lineinfile:
+     path: ~/.gemrc
+     create: yes
+     state: present
+     regexp: '^gem{{ ":" }} '
+#    insertafter: '^gem{{ ":" }} '
+     line: 'gem{{ ":" }} --no-document'
+
+!!!- name: Install Bundler 
+!!!    sudo_user: your_rbenv_user 
+!!!    command: bash -lc "gem install bundler" 
+
+ - name: Install bundler
+   become_user: deploy
+   gem:
+     name: bundler
+     version: '{{ ruby_version }}'
+     state: present

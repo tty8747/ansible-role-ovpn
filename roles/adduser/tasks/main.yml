@@ -1,0 +1,13 @@
+---
+# Create an account with ssh keys
+ - name: Adding user
+   user:
+     name: '{{ username }}'
+     groups: sudo
+     shell: /bin/bash
+
+ - name: Add ssh keys to remote host
+   authorized_key:
+     user: '{{ username }}'
+     state: present
+     key: "{{ lookup('file', '{{ pub_key }}') }}"
