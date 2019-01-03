@@ -25,14 +25,47 @@
  - name: Create config from template
    template:
      src: templates/vars.j2
-#    src: roles/ovpn/templates/vars.j2
      dest: /usr/share/easy-rsa/vars
      owner: root
      group: root
      mode: 0644
      backup: yes
 
+#- name: Source vars
+#  shell: source vars
+#  args:
+#    chdir: /usr/share/easy-rsa
+
+ - name: Source vars
+   shell: |
+     source vars
+     exit 0
+   args:
+     chdir: /usr/share/easy-rsa
+
+ - name: Building CA
+   command: ./build-ca
+   args:
+     chdir: /usr/share/easy-rsa
+  #  creates: 
+
  - name: Create dir
    file: 
      path: '/etc/openvpn/keys'
      state: directory
+
+ - name: Create vpn sever config
+   template:
+     src: templates/server.conf.j2
+     dest: /etc/openvpn/server/server.conf
+     owner: root
+     group: root
+     mode: 0644
+     backup: yes
+
+# Синтаксис автозапуска OpenVPN : systemctl enable openvpn-client@<configuration>.
+#- name: Add autostart openvpn service
+#  systemd:
+#    name: openvpn-server@server
+#    state: started
+#    enabled: yes

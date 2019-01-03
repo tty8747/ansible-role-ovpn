@@ -12,6 +12,8 @@
     update_cache: yes
     cache_valid_time: 86400
 
+    pub_ip: '84.201.144.34'
+
   roles:
     - aptUpdate
     - ovpn
