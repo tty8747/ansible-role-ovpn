@@ -44,7 +44,7 @@
      chdir: /usr/share/easy-rsa
 
  - name: Building CA
-   command: ./build-ca
+   shell: ./build-ca
    args:
      chdir: /usr/share/easy-rsa
   #  creates: 
@@ -54,6 +54,33 @@
      path: '/etc/openvpn/keys'
      state: directory
 
+ - name: "loop through list"
+   debug:
+     msg: "An item: {{item}}"
+   with_items:
+     - 1
+     - 2
+     - 3
+
+ - name: Copy keys
+#  debug:
+#    msg: "--> {{ item }}"
+   copy:
+     src: "/usr/share/easy-rsa/keys/{{ item }}"
+     dest: "/etc/openvpn/{{ item }}"
+     owner: root
+     group: root
+     mode: 0400
+     remote_src: yes
+   with_items:
+     - 'ca.crt'
+     - 'ca.key'
+     - 'vpn-server.crt'
+     - 'vpn-server.key'
+     - 'ta.key'
+     - 'dh2048.pem'
+   notify: reload openvpn
+
  - name: Create vpn sever config
    template:
      src: templates/server.conf.j2
@@ -62,6 +89,7 @@
      group: root
      mode: 0644
      backup: yes
+   notify: reload openvpn
 
 # Синтаксис автозапуска OpenVPN : systemctl enable openvpn-client@<configuration>.
 #- name: Add autostart openvpn service

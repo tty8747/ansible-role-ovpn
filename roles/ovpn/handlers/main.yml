@@ -1,0 +1,17 @@
+---
+ - name: Reload openvpn
+   service:
+     name: openvpn
+     state: reloaded
+
+ - name: Restart openvpn
+   service:
+     name: openvpn
+     state: restarted
+
+#- name: Add autostart openvpn service
+#  systemd:
+#    name: openvpn-server@server
+#    state: started
+#    enabled: yes
+
